@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {SnackbarService} from "../../shared/services/snackbar-service";
 
 @Component({
   selector: 'app-make-appointment-dialog',
@@ -12,7 +13,7 @@ export class MakeAppointmentDialogComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<MakeAppointmentDialogComponent>,
     private readonly fb: FormBuilder) { }
-  
+
   /*
     1. GET ALL AVAILABLE DOCTORS
     2. ADD FIELD "DOCTORS"

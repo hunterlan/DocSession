@@ -15,6 +15,7 @@ import { MakeAppointmentDialogComponent } from './dialogs/make-appointment-dialo
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { MatInputModule } from '@angular/material/input';
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-    MatNativeDateModule, 
+    MatNativeDateModule,
+    MatSnackBarModule
   ],
   providers: [MatDatepickerModule],
   bootstrap: [AppComponent]

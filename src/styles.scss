@@ -51,3 +51,13 @@ $custom-theme: mat-light-theme($custom-primary, $custom-accent, $custom-warn);
 
 // Apply the theme to your Angular Material components
 @include angular-material-theme($custom-theme);
+
+.success-bar {
+  background-color: green;
+  color: white;
+}
+
+.error-bar {
+  background-color: red;
+  color: white;
+}
