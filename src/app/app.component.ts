@@ -13,6 +13,9 @@ export class AppComponent {
   constructor(private readonly dialog: MatDialog) {}
 
   createAppointment(): void {
-      this.dialog.open(MakeAppointmentDialogComponent);
+      const dialogRef = this.dialog.open(MakeAppointmentDialogComponent);
+      dialogRef.afterClosed().subscribe(data => {
+        //call API here
+      });
   }
 }

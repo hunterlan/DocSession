@@ -13,6 +13,12 @@ export class MakeAppointmentDialogComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<MakeAppointmentDialogComponent>,
     private readonly fb: FormBuilder) { }
   
+  /*
+    1. GET ALL AVAILABLE DOCTORS
+    2. ADD FIELD "DOCTORS"
+  */
+
+
   ngOnInit(): void {
     this.appointmentForm = this.fb.group({
       firstName: ['', Validators.required],
