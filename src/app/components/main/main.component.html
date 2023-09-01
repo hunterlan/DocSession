@@ -1,0 +1,38 @@
+<div class="first-block">
+  <h1>DocSession</h1>
+  <div class="card-content">
+    <mat-card class="card">
+      <mat-card-header>
+        <mat-card-title>Are you patient?</mat-card-title>
+        <mat-card-subtitle>Make an appoitment with your doctor!</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <img class="photo" src="assets/doc-patient.jpeg" width="390px">
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button color="primary" (click)="createAppointment()">MAKE AN APPOITMENT</button>
+      </mat-card-actions>
+    </mat-card>
+    <mat-card class="card">
+      <mat-card-header>
+        <mat-card-title>Are you doctor?</mat-card-title>
+        <mat-card-subtitle>Check your calendar and approve appoitment!</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <img class="photo" src="assets/doctor-work.jpeg" width="390px">
+      </mat-card-content>
+      <mat-card-actions>
+        <a mat-button routerLink="/login">LOGIN</a>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+<div class="second-block">
+  <h1>Why us?</h1>
+  <p>Our service provide fast-response contact with private doctors who will be ready to friendly accept you!</p>
+
+</div>
+<div class="third-block">
+  <h1>Is it free?</h1>
+  <p>Using our service of booking private doctors is absolutelty free! However, visiting to doctor can be not free.</p>
+</div>

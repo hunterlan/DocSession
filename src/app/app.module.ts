@@ -16,12 +16,15 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {AdminModule} from "./admin/admin.module";
+import { MainComponent } from './components/main/main.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    MakeAppointmentDialogComponent
+    MakeAppointmentDialogComponent,
+    MainComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +40,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    AdminModule
   ],
   providers: [MatDatepickerModule],
   bootstrap: [AppComponent]
