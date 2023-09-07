@@ -2,7 +2,7 @@
   <mat-grid-tile>
     <mat-card>
       <h1 style="text-align: center">Login</h1>
-      <form class="login-card">
+      <form class="login-card" [formGroup]="loginForm" >
         <mat-form-field appearance="outline">
           <mat-label>Login</mat-label>
           <input matInput placeholder="user12345" formControlName="login" required>

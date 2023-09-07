@@ -16,15 +16,24 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {AdminModule} from "./admin/admin.module";
 import { MainComponent } from './components/main/main.component';
+import {AdminHomeComponent} from "./components/home/admin-home/admin-home.component";
+import {DocHomeComponent} from "./components/home/doc-home/doc-home.component";
+import {LoginComponent} from "./components/login/login.component";
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatIconModule} from "@angular/material/icon";
+import { HomeComponent } from './components/home/home.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     MakeAppointmentDialogComponent,
-    MainComponent
+    MainComponent,
+    AdminHomeComponent,
+    DocHomeComponent,
+    LoginComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +50,8 @@ import { MainComponent } from './components/main/main.component';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSnackBarModule,
-    AdminModule
+    MatToolbarModule,
+    MatIconModule,
   ],
   providers: [MatDatepickerModule],
   bootstrap: [AppComponent]
