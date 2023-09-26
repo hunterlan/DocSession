@@ -12,7 +12,7 @@ public class CreateAppointmentModel
 
   public string Date { get; set; } = null!;
 
-  public string Description { get; set; } = null!;
+  public string? Description { get; set; }
 
   public int DoctorId { get; set; }
 }

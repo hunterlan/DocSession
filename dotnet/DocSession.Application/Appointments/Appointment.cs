@@ -10,17 +10,17 @@ public class Appointment
 
   public string PhoneNumber { get; set; } = null!;
 
-  public string Email { get; set; } = null!;
+  public string? Email { get; set; }
 
-  public string Date { get; set; } = null!;
+  public DateTimeOffset Date { get; set; }
 
-  public string Description { get; set; } = null!;
+  public string? Description { get; set; }
 
   public string Note { get; set; } = null!;
 
   public int DoctorId { get; set; }
 
-  public Statutes Status { get; set; }
+  public Statutes Status { get; set; } = Statutes.Waiting;
 }
 
 public enum Statutes
