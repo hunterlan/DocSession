@@ -15,7 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
-builder.Services.AddDbContext<ApplicationContext>(opt => opt.UseInMemoryDatabase("DocSession"));
+builder.Services.AddDbContext<ApplicationContext>(opt => opt.UseSqlServer(builder.Configuration.GetSection("ConnectionString").Value));
 builder.Services.AddAuthentication(a =>
   {
     a.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
