@@ -9,12 +9,7 @@ public static class AppointmentMapper
   {
     var result = new Appointment
     {
-      FirstName = appointmentDto.FirstName,
-      LastName = appointmentDto.LastName,
-      PhoneNumber = appointmentDto.PhoneNumber,
-      Email = appointmentDto.Email,
       Date = DateTimeOffset.Parse(appointmentDto.Date),
-      Description = appointmentDto.Description,
       DoctorId = appointmentDto.DoctorId
     };
 

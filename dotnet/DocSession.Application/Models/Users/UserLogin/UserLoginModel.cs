@@ -1,6 +1,6 @@
-namespace DocSession.Entities.Requests;
+namespace DocSession.Application.Models.Users.UserLogin;
 
-public class UserLoginModel
+public record UserLoginModel
 {
   public string Username { get; set; } = null!;
 

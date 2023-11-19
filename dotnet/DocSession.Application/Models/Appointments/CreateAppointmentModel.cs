@@ -1,6 +1,6 @@
 namespace DocSession.Entities.Requests;
 
-public class CreateAppointmentModel
+public record CreateAppointmentModel
 {
   public string FirstName { get; set; } = null!;
 

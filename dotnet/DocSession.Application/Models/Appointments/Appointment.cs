@@ -1,33 +1,22 @@
+using DocSession.Application.Models.Persons;
+using DocSession.Application.Models.Statutes;
+
 namespace DocSession.Entities;
 
 public class Appointment
 {
   public int Id { get; set; }
 
-  public string FirstName { get; set; } = null!;
-
-  public string LastName { get; set; } = null!;
-
-  public string PhoneNumber { get; set; } = null!;
-
-  public string? Email { get; set; }
-
   public DateTimeOffset Date { get; set; }
 
-  public string? Description { get; set; }
-
-  public string Note { get; set; } = null!;
+  public string? Note { get; set; }
 
   public int DoctorId { get; set; }
+  public Doctor Doctor { get; set; }
 
-  public Statutes Status { get; set; } = Statutes.Waiting;
-}
+  public int PersonId { get; set; }
+  public Person Person { get; set; }
 
-public enum Statutes
-{
-  Waiting,
-  Approved,
-  Rejected,
-  Passed,
-  NotCame
+  public int StatusId { get; set; }
+  public Status Status { get; set; }
 }

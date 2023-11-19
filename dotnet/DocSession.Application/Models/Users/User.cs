@@ -1,16 +1,31 @@
-﻿namespace DocSession.Entities;
+using DocSession.Application.Models.Persons;
+using DocSession.Application.Models.Users.UserCreate;
+
+namespace DocSession.Entities;
 
 public class User
 {
+  public User()
+  {
+    
+  }
+
+  public User(UserCreateModel model)
+  {
+    Password = model.Password;
+    Person = new Person()
+    {
+      FirstName = model.FirstName,
+      MiddleName = model.MiddleName,
+      LastName = model.LastName,
+      Email = model.Email,
+      PhoneNumber = model.PhoneNumber
+    };
+  }
+
   public int Id { get; set; }
-
-  public string Username { get; set; } = null!;
-
   public string Password { get; set; } = null!;
 
-  public string Fullname { get; set; } = null!;
-
-  public string Email { get; set; } = null!;
-
-  public bool IsAdmin { get; set; }
+  public Person Person { get; set; }
+  public int PersonId { get; set; }
 }

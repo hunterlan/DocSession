@@ -1,8 +1,7 @@
 using System.Text.RegularExpressions;
-using DocSession.Entities.Requests;
 using FluentValidation;
 
-namespace DocSession.Application.Models.Users;
+namespace DocSession.Application.Models.Users.UserLogin;
 
 public class UserValidator : AbstractValidator<UserLoginModel>
 {

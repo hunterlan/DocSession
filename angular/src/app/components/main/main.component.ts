@@ -16,7 +16,7 @@ export class MainComponent {
     const dialogRef = this.dialog.open(MakeAppointmentDialogComponent);
     dialogRef.afterClosed().subscribe(data => {
       //call API here
-      this.snackbarService.showSuccess('You successfully applied a form of appointment!', 'Close');
+      //this.snackbarService.showSuccess('You successfully applied a form of appointment!', 'Close');
     });
   }
 }
