@@ -11,6 +11,9 @@ public sealed class ApplicationContext : DbContext
     Database.EnsureCreated();
   }
 
+  public DbSet<Person> Persons { get; set; }
+  public DbSet<Admin> Admins { get; set; }
+  public DbSet<Doctor> Doctors { get; set; }
   public DbSet<User> Users => Set<User>();
   public DbSet<Appointment> Appointments => Set<Appointment>();
 

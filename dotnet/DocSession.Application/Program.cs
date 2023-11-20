@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,6 +11,7 @@ using DocSession.Entities;
 using DocSession.Entities.Requests;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -40,6 +42,8 @@ builder.Services.AddAuthentication(a =>
     };
   });
 
+builder.Services.AddAuthorization();
+
 // Adding validators
 builder.Services.AddScoped<IValidator<CreateAppointmentModel>, AppointmentValidator>();
 builder.Services.AddScoped<IValidator<UserLoginModel>, UserValidator>();
@@ -62,14 +66,32 @@ app.MapPost("/users", async (IValidator<UserLoginModel> validator, ApplicationCo
     return Results.ValidationProblem(validationResult.ToDictionary());
   }
 
-  var user = db.Users.FirstOrDefault(u => u.Person.Email == userLogin.Username && u.Password == userLogin.Password);
+  var user = db.Users.Include(user => user.Person)
+    .ThenInclude(person => person.Doctor)
+    .Include(user => user.Person).ThenInclude(person => person.Admin)
+    .FirstOrDefault(u => u.Person.Email == userLogin.Username && u.Password == userLogin.Password);
 
   if (user is null)
   {
     return Results.ValidationProblem(new Dictionary<string, string[]>
     {
-      {"loginError", new string[] {"Login or password are incorrect!"}}
+      {"loginError", new[] {"Login or password are incorrect!"}}
     });
+  }
+
+  string roleName;
+
+  if (user.Person.Doctor is not null)
+  {
+    roleName = "Doctor";
+  }
+  else if (user.Person.Admin is not null)
+  {
+    roleName = "Admin";
+  }
+  else
+  {
+    roleName = "User";
   }
 
   var key = Encoding.ASCII.GetBytes(config["Jwt:Key"]!);
@@ -78,7 +100,9 @@ app.MapPost("/users", async (IValidator<UserLoginModel> validator, ApplicationCo
   var claims = new List<Claim>
   {
     new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-    new(JwtRegisteredClaimNames.Email, user.Person.Email)
+    new(JwtRegisteredClaimNames.Email, user.Person.Email),
+    new(ClaimTypes.Role, roleName),
+    new(ClaimTypes.NameIdentifier, user.PersonId.ToString())
   };
 
   var token = handler.CreateToken(new SecurityTokenDescriptor()
@@ -98,7 +122,7 @@ app.MapPost("/users/create", async (ApplicationContext db, UserCreateModel creat
   await db.Users.AddAsync(newUser);
   db.SaveChanges();
 });
-app.MapPost("/appointments/", async (IValidator<CreateAppointmentModel> validator, CreateAppointmentModel appointment,
+app.MapPost("/appointments/", [Authorize(Roles = "User, Doctor")] async (IValidator<CreateAppointmentModel> validator, CreateAppointmentModel appointment,
   ApplicationContext db) =>
 {
   var validationResult = await validator.ValidateAsync(appointment);
@@ -107,6 +131,9 @@ app.MapPost("/appointments/", async (IValidator<CreateAppointmentModel> validato
   {
     return Results.ValidationProblem(validationResult.ToDictionary());
   }
+
+  var newAppointment = appointment.MapRequestToDomain();
+  newAppointment.PersonId = int.Parse(ClaimTypes.NameIdentifier);
 
   await db.Appointments.AddAsync(appointment.MapRequestToDomain());
 
