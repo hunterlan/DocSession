@@ -43,6 +43,7 @@ builder.Services.AddAuthentication(a =>
   });
 
 builder.Services.AddAuthorization();
+builder.Services.AddControllers();
 
 // Adding validators
 builder.Services.AddScoped<IValidator<CreateAppointmentModel>, AppointmentValidator>();
@@ -57,94 +58,5 @@ using (var scope = app.Services.CreateScope())
   dbContext.Database.EnsureCreated();
 }
 
-app.MapPost("/users", async (IValidator<UserLoginModel> validator, ApplicationContext db, UserLoginModel userLogin) =>
-{
-  var validationResult = await validator.ValidateAsync(userLogin);
-
-  if (!validationResult.IsValid)
-  {
-    return Results.ValidationProblem(validationResult.ToDictionary());
-  }
-
-  var user = db.Users.Include(user => user.Person)
-    .ThenInclude(person => person.Doctor)
-    .Include(user => user.Person).ThenInclude(person => person.Admin)
-    .FirstOrDefault(u => u.Person.Email == userLogin.Username && u.Password == userLogin.Password);
-
-  if (user is null)
-  {
-    return Results.ValidationProblem(new Dictionary<string, string[]>
-    {
-      {"loginError", new[] {"Login or password are incorrect!"}}
-    });
-  }
-
-  string roleName;
-
-  if (user.Person.Doctor is not null)
-  {
-    roleName = "Doctor";
-  }
-  else if (user.Person.Admin is not null)
-  {
-    roleName = "Admin";
-  }
-  else
-  {
-    roleName = "User";
-  }
-
-  var key = Encoding.ASCII.GetBytes(config["Jwt:Key"]!);
-  var handler = new JsonWebTokenHandler();
-
-  var claims = new List<Claim>
-  {
-    new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-    new(JwtRegisteredClaimNames.Email, user.Person.Email),
-    new(ClaimTypes.Role, roleName),
-    new(ClaimTypes.NameIdentifier, user.PersonId.ToString())
-  };
-
-  var token = handler.CreateToken(new SecurityTokenDescriptor()
-  {
-    Subject = new ClaimsIdentity(claims),
-    Expires = DateTime.UtcNow.AddHours(int.Parse(config["Jwt:TokenLifetime"]!)),
-    Audience = config["Jwt:Audience"],
-    Issuer = config["Jwt:Issuer"],
-    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-  });
-
-  return Results.Ok(token);
-});
-app.MapPost("/users/create", async (ApplicationContext db, UserCreateModel createUser) =>
-{
-  var newUser = new User(createUser);
-  await db.Users.AddAsync(newUser);
-  db.SaveChanges();
-});
-app.MapPost("/appointments/", [Authorize(Roles = "User, Doctor")] async (IValidator<CreateAppointmentModel> validator, CreateAppointmentModel appointment,
-  ApplicationContext db) =>
-{
-  var validationResult = await validator.ValidateAsync(appointment);
-
-  if (!validationResult.IsValid)
-  {
-    return Results.ValidationProblem(validationResult.ToDictionary());
-  }
-
-  var newAppointment = appointment.MapRequestToDomain();
-  newAppointment.PersonId = int.Parse(ClaimTypes.NameIdentifier);
-
-  await db.Appointments.AddAsync(appointment.MapRequestToDomain());
-
-  return Results.Ok();
-});
-//To-Do: search about can we get doctor id by jwt token
-/*app.MapGet("/appointments/", async (int doctorId, int id, ApplicationContext db) =>
-{
-  var doctorsAppointments = db.Appointments.Where(a => a.DoctorId == doctorId);
-
-
-});*/
-
+app.MapControllers();
 app.Run();
